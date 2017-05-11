@@ -11,7 +11,17 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <stdlib.h>
+#include "include/image.h"
+
 int main(int argc, char *argv[]) {
+  Image image;
+
+  if (argc != 3) abort();
+
+  image.read_png_file(argv[1]);
+  image.write_png_file(argv[2]);
+
   return 0;
 }
 
