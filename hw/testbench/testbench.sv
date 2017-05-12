@@ -10,6 +10,16 @@
 //
 //===----------------------------------------------------------------------===//
 
+import "DPI-C" function int get_image_size();
+
+import "DPI-C" function void read_png_file(string filename);
+
+import "DPI-C" function void write_png_file(string filename);
+
+import "DPI-C" function void rd_image(output bit [31:0] image[]);
+
+import "DPI-C" function void wr_image(input bit [31:0] image[]);
+
 module testbench;
 
   reg clk;
@@ -19,6 +29,9 @@ module testbench;
 
   wire [127:0] data_out;
   wire valid_out;
+
+  int size;
+  bit [31:0] image[];
 
   sobel_filter uu_sobel_filter
     (
@@ -42,6 +55,22 @@ module testbench;
 
     #10 rst = 1;
     #10 rst = 0;
+
+    read_png_file("input.png");
+    
+    size = get_image_size();
+
+    image = new[size*3];
+
+    rd_image(image);
+
+    for (int i = 0; i < 100; i++) begin
+      image[i] = 0;
+    end
+
+    wr_image(image);
+
+    write_png_file("output.png");
 
     // TODO(ciroceissler): connect with libpng using DPI-C
     for (int i = 0; i < 30; i++) begin

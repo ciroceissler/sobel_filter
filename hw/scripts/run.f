@@ -2,10 +2,13 @@
 
 # simulator configuration
 -sv
+-64bit
+-lpng
 
 # dut filtes
 ../rtl/rgb2luma.sv
 ../rtl/sobel_filter.sv
 
 # testbench files
+../testbench/libpng_interface.c
 ../testbench/testbench.sv
