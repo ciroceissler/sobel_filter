@@ -31,7 +31,7 @@ module rgb2luma
 
   always_ff@(posedge clk or posedge rst) begin : GRAYSCALE
     if (rst) begin : RESET
-      data_out  <= {128{1'b0}};
+      data_out  <= 8'h00;
       valid_out <= 1'b0;
       color     <= RED;
     end : RESET

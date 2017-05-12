@@ -4,6 +4,7 @@
 -sv
 -64bit
 -lpng
+-access +rwc
 
 # dut filtes
 ../rtl/rgb2luma.sv
