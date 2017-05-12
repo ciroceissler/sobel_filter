@@ -20,9 +20,13 @@ import "DPI-C" function void rd_image(output bit [31:0] image[]);
 
 import "DPI-C" function void wr_image(input bit [31:0] image[]);
 
-typedef bit [127:0] image_t;
+typedef bit [127:0] block_t;
 
 module testbench;
+
+  localparam int RED   = 0,
+                 GREEN = 1,
+                 BLUE  = 2;
 
   reg clk;
   reg rst;
@@ -71,27 +75,19 @@ module testbench;
     rd_image(image);
 
     for (int i = 0; i < size*3; i = i + 48) begin
-      bit [7:0] r[16];
-      bit [7:0] g[16];
-      bit [7:0] b[16];
+      bit [7:0] tmp[3][16];
 
       for (int j = 0; j < 16; j++) begin
-        r[15 - j] = image[i + 3*j];
-        g[15 - j] = image[i + 3*j + 1];
-        b[15 - j] = image[i + 3*j + 2];
+        tmp[RED  ][15 - j] = image[i + 3*j];
+        tmp[GREEN][15 - j] = image[i + 3*j + 1];
+        tmp[BLUE ][15 - j] = image[i + 3*j + 2];
       end
 
-      data_in  <= image_t'(r);
-      valid_in <= 1'b1;
-      @(posedge clk);
-
-      data_in  <= image_t'(g);
-      valid_in <= 1'b1;
-      @(posedge clk);
-
-      data_in  <= image_t'(b);
-      valid_in <= 1'b1;
-      @(posedge clk);
+      for (int j = 0; j < 3; j++) begin
+        data_in  <= block_t'(tmp[j]);
+        valid_in <= 1'b1;
+        @(posedge clk);
+      end
     end
 
     valid_in <= 1'b0;
