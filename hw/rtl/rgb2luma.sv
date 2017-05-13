@@ -27,17 +27,21 @@ module rgb2luma
                    GREEN = 3'b010,
                    BLUE  = 3'b100;
 
-  reg [2:0] color;
+  reg [ 2:0] color;
+  reg [15:0] luma;
+
+  assign data_out = luma[7:0];
 
   always_ff @(posedge clk or posedge rst) begin
     if (rst) begin
-      data_out <= 8'h00;
+      luma <= 16'h00;
     end
     else if (valid_in) begin
       case (color)
-        RED    : data_out <= data_in*0.299;
-        GREEN  : data_out <= data_out + data_in*0.587;
-        BLUE   : data_out <= data_out + data_in*0.114;
+        RED    : luma <= data_in*66;
+        GREEN  : luma <= luma + data_in*129;
+        BLUE   : luma <= ((luma + (data_in*25) + 128) >> 8) + 16;
+        default: luma <= 16'h00;
       endcase
     end
   end
