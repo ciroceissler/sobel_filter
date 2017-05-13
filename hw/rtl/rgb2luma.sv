@@ -17,10 +17,10 @@ module rgb2luma
     input rst,
 
     // data ports
-    input [7:0] data_in,
-    input valid_in,
+    input      [7:0] data_in,
+    input            valid_in,
     output reg [7:0] data_out,
-    output reg valid_out
+    output reg       valid_out
   );
 
   localparam [2:0] RED   = 3'b001,

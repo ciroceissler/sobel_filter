@@ -74,20 +74,10 @@ module testbench;
 
     rd_image(image);
 
-    for (int i = 0; i < size*3; i = i + 48) begin
-      bit [7:0] tmp[3][16];
-
-      for (int j = 0; j < 16; j++) begin
-        tmp[RED  ][15 - j] = image[i + 3*j];
-        tmp[GREEN][15 - j] = image[i + 3*j + 1];
-        tmp[BLUE ][15 - j] = image[i + 3*j + 2];
-      end
-
-      for (int j = 0; j < 3; j++) begin
-        data_in  <= block_t'(tmp[j]);
-        valid_in <= 1'b1;
-        @(posedge clk);
-      end
+    for (int i = 0; i < size*3; i++) begin
+      data_in  <= {16{image[i][7:0]}};
+      valid_in <= 1'b1;
+      @(posedge clk);
     end
 
     valid_in <= 1'b0;
@@ -97,17 +87,17 @@ module testbench;
     wr_image(image_out);
     write_png_file("output.png");
 
+    $display("size output: %d", output_ptr++);
+
     $finish;
 
   end
 
   always@(posedge clk) begin
     if (valid_out) begin
-      for (int j = 0; j < 16; j++) begin
-        image_out[output_ptr++] = data_out[8*j +: 8];
-        image_out[output_ptr++] = data_out[8*j +: 8];
-        image_out[output_ptr++] = data_out[8*j +: 8];
-      end
+      image_out[output_ptr++] = data_out[7:0];
+      image_out[output_ptr++] = data_out[7:0];
+      image_out[output_ptr++] = data_out[7:0];
     end
   end
 

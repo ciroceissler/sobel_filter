@@ -8,6 +8,7 @@
 
 # dut filtes
 ../rtl/rgb2luma.sv
+../rtl/sobel_unit.sv
 ../rtl/sobel_filter.sv
 
 # testbench files
