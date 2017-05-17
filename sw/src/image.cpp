@@ -12,8 +12,8 @@
 
 #include "include/image.h"
 
-void Image::read_png_file(const char* filename) {
-  FILE *fp = fopen(filename, "rb");
+void Image::read_png_file(const std::string& filename) {
+  FILE *fp = fopen(filename.c_str(), "rb");
 
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING,
                                            NULL,
@@ -76,10 +76,10 @@ void Image::read_png_file(const char* filename) {
   fclose(fp);
 }
 
-void Image::write_png_file(const char* filename) {
+void Image::write_png_file(const std::string& filename) {
   int y;
 
-  FILE *fp = fopen(filename, "wb");
+  FILE *fp = fopen(filename.c_str(), "wb");
   if (!fp) abort();
 
   png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING,

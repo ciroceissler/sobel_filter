@@ -13,6 +13,13 @@ find_package(PNG REQUIRED)
 include_directories(${PNG_INCLUDE_DIR})
 set(LIBS ${LIBS} ${PNG_LIBRARY})
 
+#------------------------------------------------------------------------------
+# Package: Boost
+#------------------------------------------------------------------------------
+find_package(Boost COMPONENTS program_options REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+set(LIBS ${LIBS} Boost::program_options)
+
 #-------------------------------------------------------------------------------
 # Flags
 #-------------------------------------------------------------------------------

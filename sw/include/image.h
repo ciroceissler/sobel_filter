@@ -15,6 +15,7 @@
 
 #include <png.h>
 #include <stdlib.h>
+#include <iostream>
 
 class Image {
  private:
@@ -30,8 +31,8 @@ class Image {
   int height;
   png_bytep *row_pointers;
 
-  void read_png_file(const char* filename);
-  void write_png_file(const char* filename);
+  void read_png_file(const std::string& filename);
+  void write_png_file(const std::string& filename);
 };
 
 #endif  // IMAGE_H_
