@@ -13,6 +13,7 @@
 #ifndef SOBEL_H_
 #define SOBEL_H_
 
+#include <iostream>
 #include <math.h>
 #include "include/image.h"
 

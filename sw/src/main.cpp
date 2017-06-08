@@ -27,30 +27,51 @@ namespace boost_po = boost::program_options;
 
 int main(int argc, char *argv[]) {
   try {
+    bool enable_diff    = false;
+    bool disable_filter = false;
+    std::string file_input;
+    std::string file_output;
+
     boost_po::variables_map vm;
     boost_po::options_description general("General options");
 
     general.add_options()
       ("help", "produce a help message")
-      ("input", boost_po::value<std::string>()->default_value("input.png"),
+      ("enable-diff", boost_po::bool_switch(&enable_diff),
+        "compare two files")
+      ("disable-filter", boost_po::bool_switch(&disable_filter),
+        "disable sobel filter")
+      ("input",
+       boost_po::value<std::string>(&file_input)->default_value("input.png"),
         "input image file")
-      ("output", boost_po::value<std::string>()->default_value("output.png"),
+      ("output",
+       boost_po::value<std::string>(&file_output)->default_value("output.png"),
         "output image file")
       ("version", "print the version number");
 
     boost_po::store(boost_po::parse_command_line(argc, argv, general), vm);
+    boost_po::notify(vm);
 
     if (vm.count("help")) {
       std::cout << general;
+      return 0;
     } else if (vm.count("version")) {
       std::cout << "Sobel Filter 1.0" << std::endl;
-    } else {
-      Image image;
+      return 0;
+    }
+
+    if (!disable_filter) {
+      Image image(file_input);
       Sobel sobel;
 
-      image.read_png_file(vm["input"].as<std::string>());
       sobel.execute(&image);
-      image.write_png_file(vm["output"].as<std::string>());
+      image.write_png_file(file_output);
+    }
+
+    if (enable_diff) {
+      Image image(file_input);
+
+      image.compare(file_output);
     }
   } catch(std::exception& e) {
     std::cout << e.what() << "\n";

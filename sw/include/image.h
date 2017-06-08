@@ -25,6 +25,12 @@ class Image {
  public:
   Image() {}
 
+  explicit Image(const std::string& filename) {
+    std::cout << "[image] loading file: " << filename << std::endl;
+
+    this->read_png_file(filename);
+  }
+
   ~Image() {}
 
   int width;
@@ -33,6 +39,7 @@ class Image {
 
   void read_png_file(const std::string& filename);
   void write_png_file(const std::string& filename);
+  void compare(const std::string& filename);
 };
 
 #endif  // IMAGE_H_

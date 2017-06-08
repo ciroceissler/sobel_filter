@@ -123,3 +123,54 @@ void Image::write_png_file(const std::string& filename) {
   fclose(fp);
 }
 
+void Image::compare(const std::string& filename) {
+  Image image(filename);
+  int cnt_diff = 0;
+
+  if (this->height != image.height) {
+    std::cout << "different height between images:" << std::endl;
+    std::cout << " > image 1 - " << this->height << " pixels." << std::endl;
+    std::cout << " > image 2 - " << image.height << " pixels." << std::endl;
+
+    return;
+  }
+
+  if (this->width != image.width) {
+    std::cout << "different width between images:" << std::endl;
+    std::cout << " > image 1 - " << this->height << " pixels." << std::endl;
+    std::cout << " > image 2 - " << image.height << " pixels." << std::endl;
+
+    return;
+  }
+
+  for (int x = 1; x < this->height - 1; x++) {
+
+    png_bytep row1 = this->row_pointers[x];
+    png_bytep row2 = image.row_pointers[x];
+
+    for (int y = 1; y < this->width - 1; y++) {
+      png_bytep px1 = &(row1[y * 4]);
+      png_bytep px2 = &(row2[y * 4]);
+
+      if ((px1[0] != px2[0]) |
+          (px1[1] != px2[1]) |
+          (px1[2] != px2[2])) {
+
+        cnt_diff++;
+
+        std::cout << "different pixel: (" << x << "," << y << ") = ";
+        std::cout << "(" << static_cast<int>(px1[0])
+                  << "," << static_cast<int>(px1[1])
+                  << "," << static_cast<int>(px1[2]) << ")";
+        std::cout << " | ";
+        std::cout << "(" << static_cast<int>(px2[0])
+                  << "," << static_cast<int>(px2[1])
+                  << "," << static_cast<int>(px2[2]) << ")";
+        std::cout << std::endl;
+      }
+    }
+  }
+
+  std::cout << "different counter: " << cnt_diff << std::endl;
+}
+

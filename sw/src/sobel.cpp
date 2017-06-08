@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <stdio.h>
-#include <string.h>
 #include "include/sobel.h"
 
 void Sobel::execute(Image *frame) {
@@ -31,23 +29,39 @@ void Sobel::execute(Image *frame) {
       png_bytep px = &(row[x * 4]);
 
       frame_backup[x][y] = 0.30*px[0] + 0.59*px[1] + 0.11*px[2];
+
+      // NOTES(ciroceissler):
+      // another way to convert rgb to luma (without use fp).
+      // frame_backup[x][y] =  ((px[0]*66 + px[1]*129 + px[2]*25) + 128 >> 8) + 16;
     }
   }
 
-  for (int y = 1; y < frame->height - 1; y++) {
+  for (int y = 0; y < frame->height; y++) {
     png_bytep row_out = frame->row_pointers[y];
 
-    for (int x = 1; x < frame->width - 1; x++) {
+    for (int x = 0; x < frame->width; x++) {
       int x_dir = 0;
       int y_dir = 0;
-      int value = 0;;
+      int value = 0;
+
+      bool is_out_of_bounds = false;
+
+      if ((x == 0) |
+          (y == 0) |
+          (x == frame->width - 1) |
+          (y == frame->height - 1)) {
+        is_out_of_bounds = true;
+      }
 
       png_bytep px_out = &(row_out[x * 4]);
 
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-          x_dir += Gx[i][j]*(frame_backup[x - 1 + i][y - 1 + j]);
-          y_dir += Gy[i][j]*(frame_backup[x - 1 + i][y - 1 + j]);
+
+          if (!is_out_of_bounds) {
+            x_dir += Gx[i][j]*(frame_backup[x - 1 + i][y - 1 + j]);
+            y_dir += Gy[i][j]*(frame_backup[x - 1 + i][y - 1 + j]);
+          }
         }
       }
 
