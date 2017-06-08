@@ -22,6 +22,7 @@
 
 #include "include/image.h"
 #include "include/sobel.h"
+#include "include/gaussian.h"
 
 namespace boost_po = boost::program_options;
 
@@ -62,9 +63,19 @@ int main(int argc, char *argv[]) {
 
     if (!disable_filter) {
       Image image(file_input);
+      Gaussian gaussian;
       Sobel sobel;
 
+      clock_t init , end;
+
+      init = clock();
+
+      gaussian.execute(&image);
       sobel.execute(&image);
+      end = clock() - init;
+
+      std::cout << (float(end))/CLOCKS_PER_SEC << " seconds" << std::endl;
+
       image.write_png_file(file_output);
     }
 

@@ -36,6 +36,7 @@ void Sobel::execute(Image *frame) {
     }
   }
 
+  // apply sobel filter
   for (int y = 0; y < frame->height; y++) {
     png_bytep row_out = frame->row_pointers[y];
 
@@ -74,5 +75,11 @@ void Sobel::execute(Image *frame) {
       px_out[2] = value;
     }
   }
+
+  for(int i = 0; i < frame->width; i++) {
+    free(frame_backup[i]);
+  }
+
+  free(frame_backup);
 }
 
