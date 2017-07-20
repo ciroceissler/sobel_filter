@@ -152,7 +152,7 @@ module sobel_unit
       dir_x = dir_x[7] ? ~dir_x + 1 : dir_x;
       dir_y = dir_y[7] ? ~dir_y + 1 : dir_y;
 
-      pcie_packet_out.data <= dir_x + dir_y;
+      pcie_packet_out.data <= {3{dir_x + dir_y}};
 
       // TODO(ciroceissler): use threshold?
       // pcie_packet_out.data <= (dir_x + dir_y > 8'h55) ? 8'hff : 8'h00;

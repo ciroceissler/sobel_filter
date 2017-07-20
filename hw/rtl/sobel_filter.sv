@@ -21,24 +21,23 @@ module sobel_filter
     output PCIEPacket pcie_packet_out
   );
 
-  /* PCIEPacket pcie_packet_grayscale; */
+  PCIEPacket pcie_packet_grayscale;
 
   rgb2luma uu_rgb2luma
     (
       .clk             (clk),
       .rst             (rst),
       .pcie_packet_in  (pcie_packet_in),
-      .pcie_packet_out (pcie_packet_out)
-      /* .pcie_packet_out (pcie_packet_grayscale) */
+      .pcie_packet_out (pcie_packet_grayscale)
     );
 
-  /* sobel_unit uu_sobel_unit */
-  /*   ( */
-  /*     .clk             (clk), */
-  /*     .rst             (rst), */
-  /*     .pcie_packet_in  (pcie_packet_grayscale), */
-  /*     .pcie_packet_out (pcie_packet_out) */
-  /*   ); */
+  sobel_unit uu_sobel_unit
+    (
+      .clk             (clk),
+      .rst             (rst),
+      .pcie_packet_in  (pcie_packet_grayscale),
+      .pcie_packet_out (pcie_packet_out)
+    );
 
 endmodule : sobel_filter
 

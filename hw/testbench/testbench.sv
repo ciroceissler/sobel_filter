@@ -107,8 +107,8 @@ module testbench;
   always@(posedge clk) begin
     if (valid_out) begin
       image_out[output_ptr++] = data_out[7:0];
-      image_out[output_ptr++] = data_out[7:0];
-      image_out[output_ptr++] = data_out[7:0];
+      image_out[output_ptr++] = data_out[15:8];
+      image_out[output_ptr++] = data_out[23:16];
     end
   end
 
