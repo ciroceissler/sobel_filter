@@ -45,6 +45,5 @@ module rgb2luma
                     pcie_packet_in.data[23:16]*25) + 128) >> 8) + 16;
   end
 
-
 endmodule : rgb2luma
 
