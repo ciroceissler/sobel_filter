@@ -30,11 +30,24 @@ module testbench;
 
   reg clk;
   reg rst;
+
+  PCIEPacket pcie_packet_in;
+  PCIEPacket pcie_packet_out;
+
   reg [127:0] data_in;
   reg valid_in;
 
   wire [127:0] data_out;
   wire valid_out;
+
+  assign pcie_packet_in = '{valid: valid_in,
+                            data : data_in,
+                            slot : 16'h0,
+                            pad  : 4'h0,
+                            last : 1'b0};
+
+   assign data_out  = pcie_packet_out.data;
+   assign valid_out = pcie_packet_out.valid;
 
   int size;
   int output_ptr;
@@ -43,12 +56,10 @@ module testbench;
 
   sobel_filter uu_sobel_filter
     (
-      .clk       (clk),
-      .rst       (rst),
-      .data_in   (data_in),
-      .valid_in  (valid_in),
-      .data_out  (data_out),
-      .valid_out (valid_out)
+      .clk             (clk),
+      .rst             (rst),
+      .pcie_packet_in  (pcie_packet_in),
+      .pcie_packet_out (pcie_packet_out)
     );
 
   always begin
@@ -74,8 +85,8 @@ module testbench;
 
     rd_image(image);
 
-    for (int i = 0; i < size*3; i++) begin
-      data_in  <= {16{image[i][7:0]}};
+    for (int i = 0; i < size*3; i = i + 3) begin
+      data_in  <= {104'h0, image[i + 2][7:0], image[i + 1][7:0], image[i][7:0]};
       valid_in <= 1'b1;
       @(posedge clk);
     end

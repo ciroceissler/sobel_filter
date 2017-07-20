@@ -6,6 +6,11 @@
 -lpng
 -access +rwc
 
+-top testbench
+
+# packages
+../rtl/pcie_package.sv
+
 # dut filtes
 ../rtl/rgb2luma.sv
 ../rtl/sobel_unit.sv
