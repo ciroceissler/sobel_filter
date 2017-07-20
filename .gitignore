@@ -2,4 +2,5 @@ sw/build/
 hw/build/
 *.swp
 *.swo
+*.swn
 ctags
